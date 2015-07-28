@@ -1,0 +1,71 @@
+<script type="text/javascript">
+function create()
+{
+   var longUrl=document.getElementById("url").value;
+    var request = gapi.client.urlshortener.url.insert({
+    'resource': {
+      'longUrl': longUrl
+	}
+    });
+    request.execute(function(response)
+	{
+
+		if(response.id != null)
+		{
+			str =longUrl+"<br>";
+			str1 ="<a href='"+response.id+"'>"+response.id+"</a><br>";
+      str1 = "<input type='text' value='" + response.id + "' readonly autofocus='autofocus' id='short_url'><br>";
+      //+"<button class='btn btn-lg btn-material-red btn-raised btn-block' onclick='CopyToClipboard();' data-ripple-color='#F0F0F0'>Copy To Clipboard</button>"
+			document.getElementById("long").innerHTML = str;
+      document.getElementById("short").innerHTML = str1;
+		}
+		else
+		{
+			alert("error: creating short url");
+		}
+
+    });
+ }
+
+function load()
+{
+	gapi.client.setApiKey('AIzaSyC8mtuUXPdKYS2lTdRprlfFOTVoL6v3uRQ'); //get your ownn Browser API KEY
+	gapi.client.load('urlshortener', 'v1',function(){});
+
+}
+window.onload = load;
+
+</script>
+<script src="https://apis.google.com/js/client.js"> </script>
+
+
+<style>
+        div.wrapper {
+            width: 300px;
+            height:300px;
+            border:1px solid black;
+        }
+
+        input[type="text"] {
+             display: block;
+             margin : 0 auto;
+             text-align: center;
+        }
+
+    </style>
+
+<div class="row" style="margin-top:150px;">
+  <div class="col-lg-3"></div>
+  <div class="col-lg-5">
+    <%= text_field_tag :url , "", type:"text" ,class: "floating-label",style:"margin: 0 auto; width:450px;background-size: 450px 100%; " ,name:"url" ,placeholder:"Long Url" ,required:"" ,autofocus:"" ,id:"url"  %><br>
+    <button type="submit" class="btn btn-lg btn-material-deep-orange btn-raised btn-block" onclick="create($('#url').val());" data-ripple-color="#F0F0F0">Shorten URL</button>
+
+    <div id="output">
+      <div id="long" style="margin-top:20px; margin-top:20px; text-align:center">
+      </div>
+      <div id="short" style="margin-top:20px; margin-top:20px; text-align:center">
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-4"></div>
+</div>
